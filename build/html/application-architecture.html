@@ -1,0 +1,329 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Application architecture &#8212; journey-docs 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API" href="api.html" />
+    <link rel="prev" title="Repositories" href="repositories.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="api.html" title="API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="repositories.html" title="Repositories"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">journey-docs 1.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="application-architecture">
+<h1>Application architecture<a class="headerlink" href="#application-architecture" title="Permalink to this headline">¶</a></h1>
+<p>talk about 2 primary components journey app and journey collector</p>
+<p>sdf</p>
+<p>3. Repositories
+Name
+Location
+Purpose
+Active developers in repository</p>
+<div class="figure align-center">
+<p class="plantuml">
+<img src="_images/plantuml-9a50cee22d7ff0dd55a2691d57aac4e01d279398.png" alt="title Components - Component Diagram
+skinparam handwritten true
+
+
+[Business Logic]
+[Data Access] as DA
+component [Graphic User\nInterface] as GUI" />
+</p>
+</div>
+<div class="figure align-center">
+<p class="plantuml">
+<img src="_images/plantuml-0dc104a0aa19affb193e16066494b782a54303a0.png" alt="title Micro services inter communication
+
+actor User
+box &quot;Journey app&quot; #LightBlue
+   participant &quot;Web\n(Django app\nand Footprint API)&quot; as Web
+   participant &quot;Db\n(PostreSQL)&quot; as Db
+   participant &quot;Docs store\n(ArangoDB)&quot; as Arango
+   participant &quot;Queue\n(Redis and\nRQ worker)&quot; as Queue
+   participant &quot;Collector image&quot; as Collector
+endbox
+participant &quot;GitHub API\n(external)&quot; as GitHub
+
+User -&gt; Web : execute defined Job
+activate Web
+
+Web -&gt; Db : create new JobLog
+activate Db
+
+Db -&gt; Web : new JobLog ID
+deactivate Db
+
+Web -&gt; Queue : put job to queue
+activate Queue
+
+Web -&gt; User : job was started
+deactivate Web
+
+Queue -&gt; Collector : HTTP request\nJSON key
+activate Collector
+
+Collector -&gt; GitHub : HTTP request\nGET 20 commits
+activate GitHub
+
+GitHub -&gt; Collector : HTTP response\n20 commits
+deactivate GitHub
+
+Collector -&gt; GitHub : HTTP request\nGET 20 commits
+activate GitHub
+
+GitHub -&gt; Collector : HTTP response\n20 commits
+deactivate GitHub
+
+Collector -&gt; Web : HTTP request\nPOST to Footprint API
+activate Web
+
+Web -&gt; Arango : save raw commits
+activate Arango
+
+Arango -&gt; Web : confirm
+deactivate Arango
+
+Web -&gt; Collector : HTTP response CREATED / 201
+deactivate Web
+
+Collector -&gt; Queue : HTTP response\ncollecting finished
+deactivate Collector
+
+Queue -&gt; Db : update JobLog\nstatus=finished
+deactivate Queue" />
+</p>
+</div>
+<div class="section" id="app">
+<h2>App<a class="headerlink" href="#app" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center">
+<p class="plantuml">
+<img src="_images/plantuml-06be252128aca03233e5283a18f1224f487a8782.png" alt="(*) --&gt; &quot;Find Event&quot;
+&quot;Find Event&quot; -&gt; &quot;Attend Event&quot;
+
+if &quot;Capacity?&quot; then
+  -&gt;[ok] &quot;Create Ticket&quot;
+else
+  --&gt;[full] if &quot;Standby?&quot; then
+    -&gt;[ok] &quot;Standby Ticket&quot;
+  else
+    --&gt;[no] &quot;Cancel Ticket&quot;
+    &quot;Cancel Ticket&quot; --&gt; (*)
+  endif
+endif
+
+&quot;Create Ticket&quot; --&gt; ==show==
+&quot;Standby Ticket&quot; --&gt; ==show==
+==show== --&gt; &quot;Show Ticket&quot;
+&quot;Show Ticket&quot; --&gt; (*)" />
+</p>
+</div>
+</div>
+<div class="section" id="collector">
+<h2>Collector<a class="headerlink" href="#collector" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="database-schema">
+<h2>Database Schema<a class="headerlink" href="#database-schema" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center">
+<p class="plantuml">
+<img src="_images/plantuml-30fc143fb885ea1633201a0b150b0af09330c218.png" alt="title Journey app relational DB model
+
+object Job
+object Catalog
+object Key
+object Vault
+object Schedule
+object &quot;Job log&quot; as JobLog
+
+Vault : encrypted payload JSON
+
+Job : key
+Job : job
+
+Catalog : group = 'vcs'
+Catalog : type = 'commit'
+Catalog : source = 'github'
+
+Key : catalog
+Key : payload JSON
+
+Schedule : cron
+
+JobLog  : timestamp
+
+Key &quot;1&quot; -right- &quot;0..1&quot; Vault : Encrypted\nsubset of Key
+Job &quot;0..1&quot; -up- &quot;1&quot; Key : Jobs of key
+Job &quot;0..1&quot; -left-  &quot;1&quot; Catalog : Jobs of catalog
+Schedule &quot;0..1&quot; -down- &quot;1&quot; Job
+JobLog &quot;0..*&quot; -left- &quot;1&quot; Job : manual\nexecution of Job
+JobLog &quot;0..*&quot; -- &quot;1&quot; Schedule : scheduled\nexecution of Job" />
+</p>
+</div>
+</div>
+<div class="section" id="languages">
+<h2>Languages<a class="headerlink" href="#languages" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="frameworks">
+<h2>Frameworks<a class="headerlink" href="#frameworks" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="libraries-packages-modules">
+<h2>Libraries / Packages / Modules<a class="headerlink" href="#libraries-packages-modules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="database">
+<h2>Database<a class="headerlink" href="#database" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="version-numbers">
+<h2>Version numbers<a class="headerlink" href="#version-numbers" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="falcon">
+<h3>Falcon<a class="headerlink" href="#falcon" title="Permalink to this headline">¶</a></h3>
+<p>Hello Adria, Sumit and Marian.</p>
+<p>Sending brief intro into current state of project, just to speed up call.</p>
+<p>Technical stack and what has been built so far</p>
+<p>Primary language is Python, we use both 2.7 and 3.5. In this stage app consists of 2 parts, collector tool and app itself.</p>
+<p>Collector - all currently implemented collectors bundled together to single docker image with all dependencies, written in Python 3.5.
+Image as 2 interfaces:
+- command line, where image can be used as standalone tool to import data into Journey app
+- http rest api (using Falcon), this interface is used by Journey app itself, it iterates with collectors using this API and uses integrated collectors using JSON keys</p>
+<p>Journey app - set of services put together to create Journey server web application.
+- core is written in Python 2.7, Django is used as Web framework.
+- primary models for web app are modeled in traditional relational PostgreSQL
+- currently for storing raw objects/documents from imports MondoDB is used, this is currently being replaced with ArangoDB
+- as cache service Redis is used, for storing sessions, and primary Django cache backend
+- for queuing and scheduling Python&#8217;s RQ (Redis Queue) is used
+- and finally as written above, collector with it&#8217;s REST API in Falcon is bundled together with app, app than calls collectors using this API to import data on manual or scheduled basis</p>
+<p>For issues and sprint planning and as docker registry we use Gitlab.</p>
+<p>There is single VM/droplet created on Digital Ocean, for demo purposes when needed.</p>
+<p>Current tasks / development</p>
+<ul class="simple">
+<li>research story MongoDB with Neo4J vs. ArangoDB, decide what DB store will be used for storing raw collected documents and then graph data / relations between documents, result is we are switching to ArangoDB as it can efficiently replace both MondoDB with Neo4j, it&#8217;s scripting language Foxx is great for dynamical scripting, from performance point of view it stands against both specialists Mongo/Neo; using single datastore for documents, graph and also classical key/value storage has multiple benefits from architecture point of view</li>
+<li>rewriting Collector API (part of Journey app), storing data in Arango</li>
+<li>data validation</li>
+<li>creation of initial graph data and relations</li>
+<li>preparation of queries of both document data and graphs for simple views for evaluation and preparation for final visual views</li>
+<li>simple views for testing queries</li>
+</ul>
+<p>Brief list of tasks needed to be done for MVP-lite</p>
+<p>To be able to present product to potential clients, we need to show full scale of application, from processing raw available data till final visual D3JS views that will show clients what is benefit of using Journey app, how it can analyze client&#8217;s devops process, and identify problematic workflow or complicated issues.</p>
+<p>What is still missing and needs to be done to achieve this:
+- finish rewrite to ArangoDB
+- start to model graph data and create even more relations
+- prepare as much queries from these data as possible
+- find ideal way of visualize these data in views, use great mock ups already created
+- choose ideal open source project that will at best possible level show possible potential of Journey app</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Application architecture</a><ul>
+<li><a class="reference internal" href="#app">App</a></li>
+<li><a class="reference internal" href="#collector">Collector</a></li>
+<li><a class="reference internal" href="#database-schema">Database Schema</a></li>
+<li><a class="reference internal" href="#languages">Languages</a></li>
+<li><a class="reference internal" href="#frameworks">Frameworks</a></li>
+<li><a class="reference internal" href="#libraries-packages-modules">Libraries / Packages / Modules</a></li>
+<li><a class="reference internal" href="#database">Database</a></li>
+<li><a class="reference internal" href="#version-numbers">Version numbers</a><ul>
+<li><a class="reference internal" href="#falcon">Falcon</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="repositories.html"
+                        title="previous chapter">Repositories</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api.html"
+                        title="next chapter">API</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/application-architecture.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="api.html" title="API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="repositories.html" title="Repositories"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">journey-docs 1.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Eduard Kracmar.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

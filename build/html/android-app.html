@@ -1,0 +1,385 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Android aplikácia &#8212; journey-docs 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">journey-docs 1.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="android-aplikacia">
+<h1>Android aplikácia<a class="headerlink" href="#android-aplikacia" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="ucel-a-funkcionalita-android-aplikacie">
+<h2>Účel a funkcionalita Android aplikácie<a class="headerlink" href="#ucel-a-funkcionalita-android-aplikacie" title="Permalink to this headline">¶</a></h2>
+<p>Úlohou Android aplikácie je poskytnúť strednému manažmentu a servisným pracovníkom IMS rýchly prehľad
+o stave systému a upozorniť ho na dôležité stavy a udalosti. Aplikácia sa má stať denne používaným
+nástrojom, ktorý veľmi jednoducho a hlavne rýchlo informuje každého pracovníka len o tom, čo pre
+toho konkrétneho pracovníka je dôležité. Pomocou pár kliknutí doslova &#8220;za jazdy&#8221; sa má mať pracovník
+možnosť dozvedieť, či systém, za ktorý je zodpovedný, je v poruche a kde presne a akého charakteru
+porucha je.</p>
+<p>Notifikácie majú byť konfigurovateľné individuálne podľa užívateľa, avšak toto je funkcia servera.
+Aplikácia zabezpečuje len zobrazenie notifikácie za každých okolností (aj pri behu aplikácie
+na pozadí a úspornom režime Android zariadenia pripojeného do Internetu len prostredníctvom mobilnej siete)
+a umožňuje užívateľom potvrdiť prijatie notifikácie. Takto môže byť stredný manažment notifikovaný napr.
+aj o uplynutí dlhej doby bez potvrdenia notifikácie o poruche zariadenia servisným pracovníkom.</p>
+</div>
+<div class="section" id="komponenty-a-terminy">
+<h2>Komponenty a termíny<a class="headerlink" href="#komponenty-a-terminy" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="stanica-lokalita">
+<span id="locality-status"></span><h3>Stanica / lokalita<a class="headerlink" href="#stanica-lokalita" title="Permalink to this headline">¶</a></h3>
+<p>Stanica alebo lokalita je konkrétna elektrická stanica alebo stavba, na ktorej jeden server dohľaduje
+súbor zariadení a objektov.</p>
+<p>Medzi charakteristické a definované vlastnosti stanice patria:</p>
+<ul class="simple">
+<li>názov</li>
+<li>IP adresa servra</li>
+<li>verejný port</li>
+<li>verejný hostname / IP adresa</li>
+<li>zemepisná šírka a dĺžka</li>
+<li>celkový stav stanice</li>
+</ul>
+<p>Stanica ( a neskôr aj technológie na tejto stanici) má primárne tieto stavy:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">ok:</th><td class="field-body">stanica je v poriadku, všetky dohľadované objekty a zariadenia pracuju správne (rovnako majú stav <em>ok</em>)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">warning:</th><td class="field-body">min. jedna technológia alebo objekt je v najvyššom stave <em>warning</em>, inak je vsetko <em>ok</em></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">error:</th><td class="field-body">min. jedna technológia alebo objekt je v najvyššom stave <em>error</em>, inak je vsetko je <em>ok</em> alebo <em>warning</em></td>
+</tr>
+<tr class="field-even field"><th class="field-name">offline:</th><td class="field-body">stanica je nedostupná</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="zariadenie">
+<h3>Zariadenie<a class="headerlink" href="#zariadenie" title="Permalink to this headline">¶</a></h3>
+<p>Zariadenie je primárne technológia, ktorá na príslušnej stanici plní svoju funkciu a dohľadový systém toto zariadenie
+monitoruje a dohľaduje jeho aktuálny prevádzkový stav.</p>
+<table border="1" class="colwidths-given docutils" id="id1">
+<caption><span class="caption-text">Prehľad aktuálne dohľadovaných technológii a protokolov</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="1%" />
+<col width="99%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Technológia</th>
+<th class="head">Protokoly</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Switche</td>
+<td>SNMP</td>
+</tr>
+<tr class="row-odd"><td>Záložné zdroje</td>
+<td>SNMP, Modbus</td>
+</tr>
+<tr class="row-even"><td>NVR systémy</td>
+<td>HTTP, ICMP</td>
+</tr>
+<tr class="row-odd"><td>Kamery</td>
+<td>HTTP, ICMP</td>
+</tr>
+<tr class="row-even"><td>Zabezpečovacie systémy</td>
+<td>Proprietárny protokol</td>
+</tr>
+<tr class="row-odd"><td>Klimatizácie</td>
+<td>Modbus</td>
+</tr>
+<tr class="row-even"><td>Elektromery</td>
+<td>Modbus</td>
+</tr>
+<tr class="row-odd"><td>Motor generátory</td>
+<td>Modbus</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="objekt">
+<h3>Objekt<a class="headerlink" href="#objekt" title="Permalink to this headline">¶</a></h3>
+<p>Zabezpečovacie zariadenia dohľadujú stanicu a monitorujú priestory, objekty a rovnako aj technológie. Jednotlivé
+zóny sa skladajú do logických skupín, ktoré sa nazývajú objekty.</p>
+<p>Aplikácia aktuálne rozlišuje tieto typy objektov:</p>
+<ul class="simple">
+<li>domčeky ochrany</li>
+<li>budovy spoločných priestorov</li>
+<li>tampere</li>
+<li>hlavné a vedľajšie brány</li>
+<li>perimeter</li>
+</ul>
+</div>
+</div>
+<div class="section" id="navrh-skeletonu-aplikacie">
+<h2>Návrh skeletonu aplikácie<a class="headerlink" href="#navrh-skeletonu-aplikacie" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="prihlasovacia-obrazovka">
+<h3>Prihlasovacia obrazovka<a class="headerlink" href="#prihlasovacia-obrazovka" title="Permalink to this headline">¶</a></h3>
+<p>Tvorí ju prihlasovací formulár a logo SEPS-u. Formulár obsahuje tieto komponenty:</p>
+<ul class="simple">
+<li>input field pre prihlasovacie meno</li>
+<li>input field pre heslo</li>
+<li>checkbox pre zapamätanie si hesla</li>
+<li>button na prihlásenie</li>
+</ul>
+<p>Po úspešnom autorizovaní sa zobrazuje Dashboard.</p>
+</div>
+<div class="section" id="dashboard">
+<h3>Dashboard<a class="headerlink" href="#dashboard" title="Permalink to this headline">¶</a></h3>
+<p>Primárne obsahuje mapu Slovenska, na ktorej sú geograficky presne umiestnené stanice a ich stavy. Spolu s mapou je
+na dashboarde umiestnený súhrnný stav všetkých staníc.</p>
+<p>Dotykom na mapu sa zobrazí prehľad staníc.</p>
+</div>
+<div class="section" id="prehlad-stanic">
+<h3>Prehľad staníc<a class="headerlink" href="#prehlad-stanic" title="Permalink to this headline">¶</a></h3>
+<p>Tvorí ju list všetkých staníc. List obsahuje názov stanice a jej stav. Pri tomto liste je dôraz na prehľadnosť,
+teda ideálne je zoznam agregovať podľa identického stavu staníc s tým, že stanice v <em>errore</em> sú umiestnené ako
+prvé, stanice v stave <em>ok</em> posledné.</p>
+<p>Dotykom na stanicu sa posúvame do detailu stanice.</p>
+</div>
+<div class="section" id="prehlad-stanice">
+<h3>Prehľad stanice<a class="headerlink" href="#prehlad-stanice" title="Permalink to this headline">¶</a></h3>
+<p>Obdobný pohľad ako prehľad staníc, obsahom ale už sú detaily konkrétnej stanice. Pre predpokladanú početnosť
+technológií a objektov je ideálne agregovať podľa typu, teda sumárny stav všetkých kamier, sumárny stav všetkých
+switchov atď. Samostatnú skupinu so sumárnym stavom by mali tvoriť aj zabezpečované objekty.</p>
+</div>
+<div class="section" id="prehlad-typu-technologie-alebo-objektov">
+<h3>Prehľad typu technológie alebo objektov<a class="headerlink" href="#prehlad-typu-technologie-alebo-objektov" title="Permalink to this headline">¶</a></h3>
+<p>Prehľad už všetkých zariadení daného typu, teda napríklad po výbere v predch. pohľade <em>Kamery</em> tento pohľad
+už zobrazuje list všetkých kamier, agregovaných podľa stavu, teda najprv skupina kamier v stave <em>error</em> atď.</p>
+<p>Po výbere zariadenia posledný pohľad v tomto strome a to je detail zariadenia.</p>
+</div>
+<div class="section" id="detail-zariadenia">
+<h3>Detail zariadenia<a class="headerlink" href="#detail-zariadenia" title="Permalink to this headline">¶</a></h3>
+<p>Posledný pohľad je detail zariadenia. Zariadenia sú alebo tvorené jednoduchšou datovou štruktúrou alebo zložitejšou,
+môže ísť až o 3-úrovňový strom.</p>
+<p>Príkladom jednoduchého zariadenia je kamera, ktorá pozostáva z takýchto parametrov:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">názov kamery</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">ipaddress:</th><td class="field-body"><p class="first">IP adresa kamery</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">position_index:</th><td class="field-body"><p class="first">pozícia kamery na prehľadovej schéme</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">status:</th><td class="field-body"><p class="first">stav kamery</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">type:</th><td class="field-body"><p class="first">typ kamery</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">has_http:</th><td class="field-body"><p class="first">kamera je testovaná cez HTTP protokol</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">use_ping:</th><td class="field-body"><p class="first">kameta je testovaná cez ICMP a ping</p>
+<p>Príkladom zložitejšieho zariadnia je napr. switch, ktorý okrem parametrov switcha má aj 0..N portov a
+každý port má rovnako svoje parametre.</p>
+<p>Parametre switcha:</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">name:</th><td class="field-body"><p class="first">názov kamery</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">ipaddress:</th><td class="field-body"><p class="first">IP adresa kamery</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">position_index:</th><td class="field-body"><p class="first">pozícia kamery na prehľadovej schéme</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">status:</th><td class="field-body"><p class="first">stav kamery</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">poePortsNumber:</th><td class="field-body"><p class="first">počet portov</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">deviceStatus:</th><td class="field-body"><p class="first">stav zariadenia</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">networkIp:</th><td class="field-body"><p class="first">network IP</p>
+<p>A parametre každého portu:</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">description:</th><td class="field-body"><p class="first">popis</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">is_masked:</th><td class="field-body"><p class="first">maskovanie portu</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">poePortCurrent:</th><td class="field-body"><p class="first">prúd</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">poePortEnable:</th><td class="field-body"><p class="first">port aktívny</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">poePortIndex:</th><td class="field-body"><p class="first">index portu</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">poePortStatus:</th><td class="field-body"><p class="first">status portu</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">poePortVoltage:</th><td class="field-body"><p class="first">napätie</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">portLinkStatus:</th><td class="field-body"><p class="first last">stav link portu</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="operacie-na-vybranych-objektoch-a-technologiach">
+<h3>Operácie na vybraných objektoch a technológiách<a class="headerlink" href="#operacie-na-vybranych-objektoch-a-technologiach" title="Permalink to this headline">¶</a></h3>
+<p>Vybrané technológie alebo objekty umožňujú užívateľovi cez Android aplikáciu zadávať operácie a s technoóliou
+alebo objektom pracovať. Jedná sa o definovanú operáciu, ktorá vyžaduje vytvoriť <strong>príkaz</strong>, zadať ho cez API <em>POST</em>
+requestom a následne testovať definovaný čas či sa operáciu podarilo vykonať.</p>
+<p>Napr. pre PoE porty switchov je potrebné vybraný port <strong>zapnúť</strong> alebo <strong>vypnúť</strong>. Rovnako objekty
+Galaxy ústredne je potrebné <strong>zaarmovať</strong>, <strong>odarmovať</strong> alebo <strong>potvrdiť poplach</strong>.</p>
+</div>
+<div class="section" id="push-notifikacie">
+<h3>Push notifikácie<a class="headerlink" href="#push-notifikacie" title="Permalink to this headline">¶</a></h3>
+<p>Servre poskytujú cez API a <strong>Websockets push notifikácie</strong> pre Eventy. Aplikácia teda v pozadí musí
+držať permanentné spojenie s API a po obdržaní PUSH eventu cez Websockets si cez API vyžiada
+podrobné informácie o vzniknutom Evente a následne o tom cez Android notifikácie upozorňuje
+uživateľa.</p>
+<p>Pre notifikácie je potrebné vytvoriť aj mechanizmus kvitovania / potvrdzovania Eventov, ktorý bude zrealizovaný
+HTTP requestom typu PATCH al. PUT do API endpointu eventu.</p>
+</div>
+<div class="section" id="prehlad-eventov">
+<h3>Prehľad eventov<a class="headerlink" href="#prehlad-eventov" title="Permalink to this headline">¶</a></h3>
+<p>Časová os Eventov, ktoré vznikli na príslušnej stanici, ich detail a stav ako aj stav kvitovania.</p>
+</div>
+<div class="section" id="nastavenia">
+<h3>Nastavenia<a class="headerlink" href="#nastavenia" title="Permalink to this headline">¶</a></h3>
+<p>Aplikácia umožní uživateľovi upraviť, doplniť alebo zmeniť zoznam staníc, odhlásiť sa. Ďalej pre jednotlivé obrazovky
+definované v bodoch 2.3.3 až  2.3.5 je potrebné umožniť užívateľovi filtrovanie a triedenie záznamov.</p>
+</div>
+</div>
+<div class="section" id="poziadavky-na-vizual-a-ui">
+<h2>Požiadavky na vizuál a UI<a class="headerlink" href="#poziadavky-na-vizual-a-ui" title="Permalink to this headline">¶</a></h2>
+<p>Aplikácia musí spĺňať požiadavky na vizuál adekvátny aktuálnym trendom pri vývoji moderných mobilných aplikácii
+pre Android. Mala by byť tvorená v zmysle definície
+<a class="reference external" href="https://www.google.com/design/spec/material-design/introduction.html">Material Designu</a> od Google a podporovať
+Android OS 4.0 a vyššie.</p>
+</div>
+<div class="section" id="distribucia-aplikacie">
+<h2>Distribúcia aplikácie<a class="headerlink" href="#distribucia-aplikacie" title="Permalink to this headline">¶</a></h2>
+<p>Aplikácia je určená pre úzky okruh ľudí a pracuje s citlivými údajmi. Nebude distribuovaná pre verejnosť,
+práve naopak, bude potrebné mať pod kontrolou, kto si bude môcť aplikáciu nainštalovať. Preto
+je potrebné klientovi pripraviť riešenie distribúcie aplikácie za týchto podmienok izolované
+od verejného Intenetu, aby používatelia s už nainštalovanou aplikáciou mali možnosť ľahko ale bezpečne
+aplikáciu aktualizovať a flexibilne tak sledovať jej vývoj.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Android aplikácia</a><ul>
+<li><a class="reference internal" href="#ucel-a-funkcionalita-android-aplikacie">Účel a funkcionalita Android aplikácie</a></li>
+<li><a class="reference internal" href="#komponenty-a-terminy">Komponenty a termíny</a><ul>
+<li><a class="reference internal" href="#stanica-lokalita">Stanica / lokalita</a></li>
+<li><a class="reference internal" href="#zariadenie">Zariadenie</a></li>
+<li><a class="reference internal" href="#objekt">Objekt</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#navrh-skeletonu-aplikacie">Návrh skeletonu aplikácie</a><ul>
+<li><a class="reference internal" href="#prihlasovacia-obrazovka">Prihlasovacia obrazovka</a></li>
+<li><a class="reference internal" href="#dashboard">Dashboard</a></li>
+<li><a class="reference internal" href="#prehlad-stanic">Prehľad staníc</a></li>
+<li><a class="reference internal" href="#prehlad-stanice">Prehľad stanice</a></li>
+<li><a class="reference internal" href="#prehlad-typu-technologie-alebo-objektov">Prehľad typu technológie alebo objektov</a></li>
+<li><a class="reference internal" href="#detail-zariadenia">Detail zariadenia</a></li>
+<li><a class="reference internal" href="#operacie-na-vybranych-objektoch-a-technologiach">Operácie na vybraných objektoch a technológiách</a></li>
+<li><a class="reference internal" href="#push-notifikacie">Push notifikácie</a></li>
+<li><a class="reference internal" href="#prehlad-eventov">Prehľad eventov</a></li>
+<li><a class="reference internal" href="#nastavenia">Nastavenia</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#poziadavky-na-vizual-a-ui">Požiadavky na vizuál a UI</a></li>
+<li><a class="reference internal" href="#distribucia-aplikacie">Distribúcia aplikácie</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/android-app.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">journey-docs 1.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Eduard Kracmar.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

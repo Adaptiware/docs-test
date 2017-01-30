@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Základný popis projektu &#8212; journey-docs 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">journey-docs 1.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="zakladny-popis-projektu">
+<h1>Základný popis projektu<a class="headerlink" href="#zakladny-popis-projektu" title="Permalink to this headline">¶</a></h1>
+<p>Tento dokument obsahuje informácie pre prácu so softwárovým produktom vyvinutým spoločnosťou Contineo.
+Slúži ako podklad pre vypracovanie cenovej ponuky na dielo, jeho rozsah a obsah nenahrádza
+finálný referenčný manuál k danému dielu.</p>
+<div class="section" id="co-je-dohladovy-system-ims-stanic">
+<h2>Čo je &#8220;Dohľadový systém IMS staníc&#8221;<a class="headerlink" href="#co-je-dohladovy-system-ims-stanic" title="Permalink to this headline">¶</a></h2>
+<p>Dohľadový systém IMS staníc bol vyvinutý špeciálne pre potreby spoločnosti SEPS a.s.. Je to
+komplexný dohľadový systém pozostávajúci z rôznorodých komponentov a to ako softvérových, tak
+hardvérových. Jeho primárna funkcia je dohľadovať vybrané technológie a upozorniť v prípade
+potreby náležité osoby o udalostiach, ako sú výpadky, nežiadúce stavy až po narušenie bezpečnosti
+staníc a to ako samotným stavom, tak prienikom nežiadúcich osôb do sledovaných priestorov alebo
+k sledovaným technológiám.</p>
+</div>
+<div class="section" id="decentralizacia-dohladoveho-systemu">
+<h2>Decentralizácia dohľadového systému<a class="headerlink" href="#decentralizacia-dohladoveho-systemu" title="Permalink to this headline">¶</a></h2>
+<p>Z dôvodu komplexnosti celej SEPS siete a umožneniu dohľadu aj v situáciách, kedy dôjde
+k prerušeniu spojenia medzi jednotlivými stanicami, alebo medzi centrálnou serverovňou,
+je potrebné zabezpečiť možnosť dohľadovať technológie pre manažment, riadiacich
+pracovníkov na nižšej úrovni, lokálnych dispečérov až po kompetentných pracovníkov
+v danej lokalite.</p>
+<p>Ďalším používateľom dohľadového systému je spoločnosť,
+ktoré zabezpečujú servis a údržbu dohľadového systému. Preto je lokálny server,
+na ktorom beží dohľadový server umiestnený vždy v konkrétnej lokalite a jeho funkčnosť
+nie je podmienená spojením s ostatnými stanicami, alebo s centrálnou serverovňou.
+Aj v prípade straty konektivity teda lokálny server plnohodnotne dohľaduje technológie
+v svojej lokalite, zaznamenáva zmeny stavov, nežiadúce udalosti a notifikuje o nich
+spôsobom, ktorý je v danom momente možný.</p>
+</div>
+<div class="section" id="aplikacne-servre-a-ich-decentralizacia">
+<h2>Aplikačné servre a ich decentralizácia<a class="headerlink" href="#aplikacne-servre-a-ich-decentralizacia" title="Permalink to this headline">¶</a></h2>
+<p>V každej lokalite sa nachádza serverovská aplikácia, ktorá podľa stavu siete:</p>
+<ul class="simple">
+<li>pracuje samostatne a dohľaduje technológie v svojej sieti, alebo</li>
+<li>v prípade funkčnosti prepojov medzi ostatnými stanicami si vymieňa potrebné informácie s ostanými
+servrami</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Základný popis projektu</a><ul>
+<li><a class="reference internal" href="#co-je-dohladovy-system-ims-stanic">Čo je &#8220;Dohľadový systém IMS staníc&#8221;</a></li>
+<li><a class="reference internal" href="#decentralizacia-dohladoveho-systemu">Decentralizácia dohľadového systému</a></li>
+<li><a class="reference internal" href="#aplikacne-servre-a-ich-decentralizacia">Aplikačné servre a ich decentralizácia</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/intro.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">journey-docs 1.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Eduard Kracmar.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>
